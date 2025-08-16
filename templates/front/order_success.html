@@ -1,0 +1,28 @@
+{#{% extends "front/index.html" %}#}
+{#{% block title %}Order Success{% endblock %}#}
+{##}
+{#{% block content %}#}
+{#<div class="checkout-container">#}
+{#    <h1 class="checkout-title">🎉 Order Successful!</h1>#}
+{#    <p>Thank you for your purchase. Your order has been placed successfully.</p>#}
+{#    <p>Please check your email for the invoice and details.</p>#}
+{##}
+{#    <a href="{{ url_for('catalog') }}" class="order-success-btn">Continue Shopping</a>#}
+{#</div>#}
+{#{% endblock %}#}
+
+
+{% extends "front/index.html" %}
+{% block title %}Order Success{% endblock %}
+
+{% block content %}
+<div class="order-success-container">
+    <div class="order-success-icon">✅</div>
+    <h1>🎉 Order Successful!</h1>
+    <p>Thank you for your purchase.</p>
+    <p>Your order has been placed successfully.</p>
+    <p>Please check your email for the invoice and details.</p>
+
+    <a href="{{ url_for('catalog') }}" class="order-success-btn">Continue Shopping</a>
+</div>
+{% endblock %}

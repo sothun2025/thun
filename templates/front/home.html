@@ -1,0 +1,92 @@
+{% extends "front/index.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="hero">
+  <div class="carousel" id="heroCarousel">
+    <div class="slides">
+      {% for p in featured %}
+        <div class="slide">
+          <img src="{{ p.image }}" alt="{{ p.title|e }}">
+          <div class="caption">
+            <h2>{{ p.title }}</h2>
+            <p>${{ p.price }}</p>
+            <a class="btn" href="{{ url_for('product_detail', pid=p.id) }}">View</a>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+
+    <button class="nav prev" aria-label="Previous">&#10094;</button>
+    <button class="nav next" aria-label="Next">&#10095;</button>
+
+    <div class="dots"></div>
+  </div>
+</div>
+
+<div class="container">
+  <h1>Welcome to MyShop</h1>
+  <p>Find your next gadget at a great price.</p>
+</div>
+
+<script>
+(function () {
+  const root = document.getElementById('heroCarousel');
+  const track = root.querySelector('.slides');
+  const slides = Array.from(root.querySelectorAll('.slide'));
+  const prev  = root.querySelector('.prev');
+  const next  = root.querySelector('.next');
+  const dots  = root.querySelector('.dots');
+
+  let index = 0, timer;
+
+  // Dots
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.setAttribute('aria-label', 'Go to slide ' + (i+1));
+    b.addEventListener('click', () => go(i));
+    dots.appendChild(b);
+  });
+
+  function update() {
+    track.style.transform = `translateX(-${index * 100}%)`;
+    dots.querySelectorAll('button').forEach((b,i)=> b.classList.toggle('active', i===index));
+  }
+  function go(i) {
+    index = (i + slides.length) % slides.length;
+    update();
+    restart();
+  }
+  function nextSlide(){ go(index+1); }
+  function prevSlide(){ go(index-1); }
+
+  prev.addEventListener('click', prevSlide);
+  next.addEventListener('click', nextSlide);
+
+  function restart(){
+    clearInterval(timer);
+    timer = setInterval(nextSlide, 5000); // auto-play 5s
+  }
+  update(); restart();
+
+  // Pause on hover
+  root.addEventListener('mouseenter', ()=> clearInterval(timer));
+  root.addEventListener('mouseleave', restart);
+
+  // Swipe on mobile
+  let sx=0;
+  root.addEventListener('touchstart', e=> sx=e.touches[0].clientX, {passive:true});
+  root.addEventListener('touchend', e=>{
+    const dx = e.changedTouches[0].clientX - sx;
+    if (Math.abs(dx) > 40) (dx<0 ? nextSlide() : prevSlide());
+  });
+})();
+</script>
+{% endblock %}
+{% block footer %}
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; {{ current_year }} MyShop. All rights reserved.</p>
+        <p><a href="{{ url_for('about') }}">About Us</a> | <a href="{{ url_for('contact') }}">Contact</a></p>
+    </div>
+</footer>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends "front/index.html" %}
+{% block title %}Catalog{% endblock %}
+{% block content %}
+    <h1>Product Catalog</h1>
+
+{% if query or min_price or max_price %}
+  <p>
+    Showing {{ result_count }} result{{ '' if result_count==1 else 's' }}
+    {% if query %} for “{{ query }}”{% endif %}
+    {% if min_price or max_price %}
+      {% if min_price %} min ${{ min_price }}{% endif %}
+      {% if max_price %} max ${{ max_price }}{% endif %}
+    {% endif %}
+    — <a href="{{ url_for('catalog') }}">clear</a>
+  </p>
+{% endif %}
+    <div class="catalog-grid">
+      {% for product in products %}
+        <div class="catalog-card">
+          <!-- Handles both external and local images -->
+          <img
+            src="{% if product.image.startswith('http') %}{{ product.image }}{% else %}{{ url_for('static', filename='images/' + product.image) }}{% endif %}"
+            alt="{{ product.title }}">
+          <div class="catalog-info">
+            <div class="catalog-name">{{ product.title }}</div>
+            <div class="catalog-price">${{ product.price }}</div>
+            <a class="catalog-details-link" href="{{ url_for('product_detail', pid=product.id) }}">View Details</a>
+          </div>
+          <a class="catalog-add-btn" href="{{ url_for('add_to_cart', pid=product.id) }}" role="action">Add to Cart</a>
+        </div>
+      {% endfor %}
+    </div>
+{% endblock %}
+{% block footer %}
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; {{ current_year }} MyShop. All rights reserved.</p>
+        <p><a href="{{ url_for('about') }}">About Us</a> | <a href="{{ url_for('contact') }}">Contact</a></p>
+    </div>
+</footer>
+{% endblock %}

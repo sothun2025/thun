@@ -1,0 +1,49 @@
+{% extends "front/index.html" %}
+{% block title %}Your Cart{% endblock %}
+{% block content %}
+    <h1>Your Cart</h1>
+    {% if cart_items %}
+        <div class="cart-table">
+            {% for item in cart_items %}
+                <div class="cart-row">
+{#                    <div class="cart-image">#}
+{#                        <img src="{{ url_for('static', filename='images/' ~ item.product.image) }}" alt="{{ item.product.name|e }}" width="60" height="60">#}
+{#                    </div>#}
+                    <img src="{{ item.product.image }}" alt="{{ item.product.name|e }}" width="60" height="60"
+                    onerror="this.onerror=null;this.src='https://via.placeholder.com/60x60?text=No+Image';">
+
+                    <div class="cart-name">
+                        {{ item.product.name|e }}
+                        <div class="cart-desc">{{ item.product.desc|e }}</div>
+                    </div>
+                    <div class="cart-price">${{ '%.2f'|format(item.product.price) }}</div>
+                    <div class="cart-qty-controls">
+                        <a href="{{ url_for('remove_from_cart', pid=item.product.id) }}" title="Remove One">-</a>
+                        <span>{{ item.qty }}</span>
+                        <a href="{{ url_for('add_to_cart', pid=item.product.id) }}" title="Add One">+</a>
+                    </div>
+                    <div class="cart-item-total">${{ '%.2f'|format(item.total) }}</div>
+                    <div class="cart-delete">
+                        <a href="{{ url_for('delete_from_cart', pid=item.product.id) }}" title="Delete Item">🗑️</a>
+                    </div>
+                </div>
+            {% endfor %}
+            <div class="cart-total-row">
+                <span class="cart-total-label">Total:</span>
+                <span class="cart-total-amount">${{ '%.2f'|format(total) }}</span>
+            </div>
+        </div>
+        <a class="cart-checkout-btn" href="{{ url_for('checkout') }}">Proceed to Checkout</a>
+        <a class="products-back-link" href="{{ url_for('catalog') }}">Back to Catalog</a>
+    {% else %}
+        <p class="cart-empty">Your cart is empty.</p>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+                <footer class="footer">
+                <div class="footer-content">
+                    <p>&copy; {{ current_year }} MyShop. All rights reserved.</p>
+                    <p><a href="{{ url_for('about') }}">About Us</a> | <a href="{{ url_for('contact') }}">Contact</a></p>
+                </div>
+            </footer>
+{% endblock %}

@@ -1,0 +1,59 @@
+{#{% extends "front/index.html" %}#}
+{#{% block title %}Checkout{% endblock %}#}
+{#{% block content %}#}
+{#    <h1>Checkout</h1>#}
+{#    <form method="post">#}
+{#        <label for="name">Name:</label>#}
+{#        <input type="text" name="name" id="name" required>#}
+{##}
+{#        <label for="address">Address:</label>#}
+{#        <input type="text" name="address" id="address" required>#}
+{##}
+{#        <label for="email">Email:</label>#}
+{#        <input type="email" name="email" id="email" required>#}
+{##}
+{#        <label for="phone">Phone:</label>#}
+{#        <input type="text" name="phone" id="phone" required>#}
+{##}
+{#        <input type="submit" value="Submit Order">#}
+{#    </form>#}
+{#    <h2>Order Summary</h2>#}
+{#    <ul>#}
+{#      {% for item in cart_items %}#}
+{#        <li>{{ item.product.name }} x {{ item.qty }} = ${{ item.total }}</li>#}
+{#      {% endfor %}#}
+{#    </ul>#}
+{#    <p>Total: ${{ total }}</p>#}
+{#{% endblock %}#}
+
+{% extends "front/index.html" %}
+{% block title %}Checkout{% endblock %}
+{% block content %}
+<div class="checkout-container">
+    <h1 class="checkout-title">Checkout</h1>
+    <form method="post" class="checkout-form">
+        <label for="name">Name:</label>
+        <input type="text" name="name" id="name" required>
+
+        <label for="address">Address:</label>
+        <input type="text" name="address" id="address" required>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required>
+
+        <label for="phone">Phone:</label>
+        <input type="text" name="phone" id="phone" required>
+
+        <input type="submit" value="Submit Order" class="checkout-btn">
+    </form>
+    <div class="order-summary">
+        <h2>Order Summary</h2>
+        <ul>
+          {% for item in cart_items %}
+            <li>{{ item.product.title }} x {{ item.qty }} = ${{ '%.2f'|format(item.total) }}</li>
+          {% endfor %}
+        </ul>
+        <p class="order-summary-total">Total: <span>${{ '%.2f'|format(total) }}</span></p>
+    </div>
+</div>
+{% endblock %}

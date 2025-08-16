@@ -1,0 +1,32 @@
+{% extends "front/index.html" %}
+{% block title %}About{% endblock %}
+
+{% block content %}
+<div class="about-page">
+    <h1>About Us</h1>
+    <p>
+        Welcome to <b>MyShop</b>!<br>
+        We offer a curated selection of the latest electronics, including smartphones, headphones, game consoles, and more.<br>
+        Our mission is to make online shopping simple, fun, and secure.<br>
+        <br>
+        <b>Contact:</b> darahost91@gmail.com<br>
+        <b>Location:</b> Phnom Penh, Cambodia
+    </p>
+    <hr>
+    <h2>Why Shop With Us?</h2>
+    <ul>
+        <li>Wide range of latest electronics</li>
+        <li>Trusted, genuine products</li>
+        <li>Great customer support</li>
+        <li>Fast, safe checkout</li>
+    </ul>
+</div>
+{% endblock %}
+{% block footer %}
+<footer class="footer">
+    <div class="footer-content">
+        <p>&copy; {{ current_year }} MyShop. All rights reserved.</p>
+        <p><a href="{{ url_for('about') }}">About Us</a> | <a href="{{ url_for('contact') }}">Contact</a></p>
+    </div>
+</footer>
+{% endblock %}
