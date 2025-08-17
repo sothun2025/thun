@@ -26,16 +26,50 @@
             <div class="catalog-price">${{ product.price }}</div>
             <a class="catalog-details-link" href="{{ url_for('product_detail', pid=product.id) }}">View Details</a>
           </div>
-          <a class="catalog-add-btn" href="{{ url_for('add_to_cart', pid=product.id) }}" role="action">Add to Cart</a>
+{#          <a class="catalog-add-btn" href="{{ url_for('add_to_cart', pid=product.id) }}" role="action">Add to Cart</a>#}
+            <button class="catalog-add-btn add-to-cart" type="button" data-id="{{ product.id }}">
+              Add to Cart
+            </button>
+            <noscript>
+              <a class="catalog-add-btn" href="{{ url_for('add_to_cart', pid=product.id) }}">Add to Cart</a>
+            </noscript>
         </div>
       {% endfor %}
     </div>
 {% endblock %}
-{% block footer %}
-<footer class="footer">
-    <div class="footer-content">
-        <p>&copy; {{ current_year }} MyShop. All rights reserved.</p>
-        <p><a href="{{ url_for('about') }}">About Us</a> | <a href="{{ url_for('contact') }}">Contact</a></p>
-    </div>
-</footer>
+
+{% block extra_scripts %}
+<script>
+  document.querySelectorAll('.add-to-cart').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const pid = btn.dataset.id;
+      try {
+        const res = await fetch(`{{ url_for('add_to_cart', pid=0) }}`.replace('0', pid), {
+          method: 'POST',
+          headers: { 'X-Requested-With': 'fetch' }
+        });
+        const data = await res.json();
+        if (data.success) {
+          // update the cart badge
+          const badge = document.getElementById('cart-count');
+          if (badge) badge.textContent = data.cart_count;
+
+          // Pretty popup (like your image)
+          Swal.fire({
+            icon: 'success',
+            title: 'Add To Cart',
+            text: 'Successfully!',
+            confirmButtonText: 'OK'
+          });
+        } else {
+          Swal.fire({ icon: 'error', title: 'Oops', text: data.error || 'Failed to add item.' });
+        }
+      } catch (e) {
+        Swal.fire({ icon: 'error', title: 'Network error', text: 'Please try again.' });
+      }
+    });
+  });
+</script>
 {% endblock %}
+
+

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, redirect, url_for, request, flash
+from flask import Flask, render_template, session, redirect, url_for, request, flash,jsonify
 from flask_mail import Mail, Message
 import requests
 from config import Config
@@ -713,27 +713,28 @@ def cart():
 @app.context_processor
 def inject_cart_count():
     cart = session.get('cart', {})
-    count = sum(cart.values()) if cart else 0
-    return {"cart_count": count}
+    return {"cart_count": sum(cart.values())}
 
 
-@app.route('/add_to_cart/<int:pid>')
+@app.route('/add_to_cart/<int:pid>', methods=['POST', 'GET'])
 def add_to_cart(pid):
+    product = get_product(pid)
+    if not product:
+        if request.method == 'POST':
+            return jsonify({"success": False, "error": "Product not found"}), 404
+        flash('Product not found.')
+        return redirect(request.referrer or url_for('catalog'))
+
     cart = session.get('cart', {})
     cart[str(pid)] = cart.get(str(pid), 0) + 1
     session['cart'] = cart
-    flash('Item added to cart!')
-    next_url = request.args.get('next') or request.referrer or url_for('catalog')
-    return redirect(next_url)
+    cart_count = sum(cart.values())
 
-# --- Add to Cart ---
-# @app.route('/add_to_cart/<int:pid>')
-# def add_to_cart(pid):
-#     cart = session.get('cart', {})
-#     cart[str(pid)] = cart.get(str(pid), 0) + 1
-#     session['cart'] = cart
-#     flash('Item added to cart!')
-#     return redirect(url_for('cart'))# ជ្រើសរើស page ត្រឡប់
+    if request.method == 'POST' or request.headers.get('X-Requested-With') == 'fetch':
+        return jsonify({"success": True, "cart_count": cart_count})
+
+    flash('Item added to cart!')
+    return redirect(request.referrer or url_for('catalog'))
 
 # --- Remove from Cart ---
 @app.route('/remove_from_cart/<int:pid>')

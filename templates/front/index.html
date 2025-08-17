@@ -17,12 +17,17 @@
 {#            <a href="{{ url_for('cart') }}">Cart</a>#}
             <a href="{{ url_for('about') }}">About</a>
             <a href="{{ url_for('contact') }}">contact</a>
-             <a href="{{ url_for('cart') }}" class="nav-cart">
-                      Cart
-                      {% if cart_count %}
-                        <span class="cart-badge">{{ cart_count }}</span>
-                      {% endif %}
-             </a>
+{#             <a href="{{ url_for('cart') }}" class="nav-cart">#}
+{#                      Cart#}
+{#                      {% if cart_count %}#}
+{#                        <span class="cart-badge">{{ cart_count }}</span>#}
+{#                      {% endif %}#}
+{#             </a>#}
+            <a href="{{ url_for('cart') }}" class="nav-cart">
+              Cart
+              <span id="cart-count" class="cart-badge">{{ cart_count or 0 }}</span>
+            </a>
+
         </div>
             <div class="nav-right">
                   <form class="search-form" action="{{ url_for('search') }}" method="get">
@@ -32,15 +37,6 @@
                       <button type="submit">Search</button>
                   </form>
             </div>
-{#            <div class="nav-cart">#}
-{#                 <a href="{{ url_for('cart') }}" class="nav-cart">#}
-{#                      Cart#}
-{#                      {% if cart_count %}#}
-{#                        <span class="cart-badge">{{ cart_count }}</span>#}
-{#                      {% endif %}#}
-{#                 </a>#}
-{#            </div>#}
-
     </nav>
     <hr>
     <div class="container">
@@ -56,10 +52,11 @@
       {% block content %}{% endblock %}
     </div>
     {% block footer %}
-    <footer class="footer">
-        <div>
-            &copy; 2025 MyShop | Powered by Dara
-        </div>
+   <footer class="footer">
+    <div class="footer-content">
+        <p>&copy; {{ current_year }} MISSTORE. All rights reserved.</p>
+        <p><a href="{{ url_for('about') }}">About Us</a> | <a href="{{ url_for('contact') }}">Contact</a></p>
+    </div>
     </footer>
     {% endblock %}
 {# {% block content %}{% endblock %}#}
@@ -70,4 +67,6 @@
     });
   </script>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+{% block extra_scripts %}{% endblock %}
 </html>

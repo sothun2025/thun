@@ -1,21 +1,3 @@
-{#{% extends "front/index.html" %}#}
-{#{% block title %}Product Details{% endblock %}#}
-{#{% block content %}#}
-{#<div class="product-details">#}
-{#    <img class="product-image" src="{{ url_for('static', filename='images/' + product.image) }}" alt="{{ product.name }}">#}
-{#    <div class="product-info">#}
-{#        <h1>{{ product.name }}</h1>#}
-{#        <div class="product-desc">{{ product.desc }}</div>#}
-{#        <div class="product-price">Price: ${{ product.price }}</div>#}
-{#        <div class="product-actions">#}
-{#            <a class="product-add-btn" href="{{ url_for('add_to_cart', pid=product.id) }}">Add to Cart</a>#}
-{#            <a class="product-back-link" href="{{ url_for('catalog') }}">Back to Catalog</a>#}
-{#        </div>#}
-{#    </div>#}
-{#</div>#}
-{#{% endblock %}#}
-{##}
-
 {% extends "front/index.html" %}
 {% block title %}Product Details{% endblock %}
 {% block content %}
@@ -32,4 +14,3 @@
     </div>
 </div>
 {% endblock %}
-
